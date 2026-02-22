@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raniel Dela Cruz - Personal Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Snow Background -->
+    <div class="snow-container" id="snowContainer"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="logo">RD</h1>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <button class="theme-toggle" id="themeToggle" title="Toggle Light/Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <main class="container">
+        <!-- Profile Section -->
+        <div class="bento-grid">
+            <div class="bento-item profile" id="home">
+                <div class="profile-content">
+                    <img src="image/409e8302-094e-4ef3-942f-814fff338387.jpg" alt="Profile" class="profile-img">
+                    <h1>Raniel Dela Cruz</h1>
+                    <p class="job-title">Full Stack Developer</p>
+                    <div class="social-links">
+                        <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Me -->
+            <div class="bento-item about" id="about">
+                <h2>About Me</h2>
+                <p>"I’m a passionate Web Developer who views a blank text editor as a world of possibilities. My focus is on building seamless, high-performance digital experiences that bridge the gap between complex backend logic and intuitive user interfaces. For me, coding isn't just a job—it’s the craft of turning 'it can't be done' into 'it's live.'"</p>
+            </div>
+
+            <!-- Tech Stack -->
+            <div class="bento-item tech-stack">
+                <h2>Tech Stack</h2>
+                <div class="tech-items">
+                    <div class="tech-badge">HTML/CSS</div>
+                    <div class="tech-badge">JavaScript</div>
+                    <div class="tech-badge">React</div>
+                    <div class="tech-badge">Node.js</div>
+                    <div class="tech-badge">Python</div>
+                    <div class="tech-badge">MongoDB</div>
+                </div>
+            </div>
+
+            <!-- Information Card -->
+            <div class="bento-item info">
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <h3>Location</h3>
+                        <p>Makati City Phillipines</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-briefcase"></i>
+                    <div>
+                        <h3>Experience</h3>
+                        <p>AWS Academy</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-code"></i>
+                    <div>
+                        <h3>Projects</h3>
+                        <p>20+ Completed</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Projects -->
+            <div class="bento-item projects-featured" id="projects">
+                <h2>Featured Project</h2>
+                <div class="project-card">
+                    <h3>E-Commerce Platform</h3>
+                    <p>A full-stack e-commerce solution with React, Node.js, and MongoDB</p>
+                    <div class="project-tags">
+                        <span>React</span>
+                        <span>Node.js</span>
+                        <span>MongoDB</span>
+                    </div>
+                    <a href="#" class="btn-small">View Project →</a>
+                </div>
+            </div>
+
+            <!-- Gallery -->
+            <div class="bento-item gallery">
+                <h2>Gallery</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="image/c9fdce98-3255-45d2-aee9-bb5cead828f8.jpg" alt="Friends Gathering">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="image/de207442-f0fa-4d0b-af5f-c9273cdd5c2e.jpg" alt="Night With Friends">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="image/78312060-8440-43bf-b772-ab63abb1278a.jpg" alt="Memories">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects List -->
+            <div class="bento-item projects-list">
+                <h2>Other Projects</h2>
+                <ul class="project-list">
+                    <li>
+                        <strong>Task Manager App</strong>
+                        <p>React + Firebase</p>
+                    </li>
+                    <li>
+                        <strong>Weather Dashboard</strong>
+                        <p>Vue.js + API Integration</p>
+                    </li>
+                    <li>
+                        <strong>Portfolio Builder</strong>
+                        <p>Next.js + Tailwind CSS</p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contact CTA -->
+            <div class="bento-item contact-cta" id="contact">
+                <h2>Let's Connect</h2>
+                <p>Interested in collaborating? Feel free to reach out!</p>
+                <a href="mailto:john@example.com" class="btn-primary">Get In Touch</a>
+            </div>
+
+            <!-- Guestbook -->
+            <div class="bento-item guestbook">
+                <h2>Guestbook</h2>
+                <form id="guestbookForm" class="guestbook-form">
+                    <div class="form-group">
+                        <input type="text" id="visitorName" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="visitorEmail" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="visitorMessage" placeholder="Leave a message..." rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Sign Guestbook</button>
+                </form>
+                <div id="guestbookEntries" class="guestbook-entries"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; Raniel Dela Cruz . PERSONAL WEBSITE</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
