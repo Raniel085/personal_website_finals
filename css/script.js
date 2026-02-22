@@ -237,6 +237,99 @@ window.addEventListener('resize', () => {
     snowResizeTimer = setTimeout(generateSnow, 250);
 });
 
+// Music Player Functionality
+const playlist = [
+    { title: 'Kalapastangan', artist: 'Artist', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', spotifyUrl: 'https://open.spotify.com/artist/3tWAXoP37qDPvpAOnj7Zmr?si=ZlC6oza3QUiXLR7J06FASg' },
+    { title: 'Always', artist: 'Artist', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1E8NG9HeYK83rI?si=MVTreXdcSuuIdh4b9EU20A' },
+    { title: 'Saglit', artist: 'Artist', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', spotifyUrl: 'https://open.spotify.com/album/2G5Ehp6kqdH5z4sGVCC8yY' }
+];
+
+let currentTrackIndex = 0;
+let isPlaying = false;
+
+const audioPlayer = document.getElementById('audioPlayer');
+const playPauseBtn = document.getElementById('playPauseBtn');
+const progressBar = document.getElementById('progressBar');
+const progressFill = document.getElementById('progressFill');
+const timeCurrent = document.getElementById('timeCurrent');
+const timeTotal = document.getElementById('timeTotal');
+const currentTrackTitle = document.getElementById('currentTrackTitle');
+const currentTrackArtist = document.getElementById('currentTrackArtist');
+const spotifyLink = document.getElementById('spotifyLink');
+const playlistItems = document.querySelectorAll('.playlist-item');
+
+function formatTime(seconds) {
+    if (isNaN(seconds)) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+function loadTrack(index) {
+    currentTrackIndex = index;
+    const track = playlist[index];
+    audioPlayer.src = track.url;
+    currentTrackTitle.textContent = track.title;
+    currentTrackArtist.textContent = track.artist;
+    spotifyLink.href = track.spotifyUrl;
+    
+    playlistItems.forEach((item, i) => {
+        item.classList.toggle('active', i === index);
+    });
+    
+    if (isPlaying) {
+        audioPlayer.play();
+    }
+}
+
+function togglePlayPause() {
+    if (isPlaying) {
+        audioPlayer.pause();
+        isPlaying = false;
+        playPauseBtn.innerHTML = '<i class=\"fas fa-play\"></i>';
+    } else {
+        audioPlayer.play();
+        isPlaying = true;
+        playPauseBtn.innerHTML = '<i class=\"fas fa-pause\"></i>';
+    }
+}
+
+playPauseBtn.addEventListener('click', togglePlayPause);
+
+audioPlayer.addEventListener('timeupdate', () => {
+    const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    progressFill.style.width = percent + '%';
+    timeCurrent.textContent = formatTime(audioPlayer.currentTime);
+});
+
+audioPlayer.addEventListener('loadedmetadata', () => {
+    timeTotal.textContent = formatTime(audioPlayer.duration);
+});
+
+audioPlayer.addEventListener('ended', () => {
+    currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+    loadTrack(currentTrackIndex);
+    audioPlayer.play();
+});
+
+progressBar.addEventListener('click', (e) => {
+    const rect = progressBar.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    audioPlayer.currentTime = percent * audioPlayer.duration;
+});
+
+playlistItems.forEach((item, index) => {
+    item.addEventListener('click', () => {
+        loadTrack(index);
+        isPlaying = true;
+        playPauseBtn.innerHTML = '<i class=\"fas fa-pause\"></i>';
+        audioPlayer.play();
+    });
+});
+
+// Load first track on page load
+loadTrack(0);
+
 // Initial generate after DOM ready
 document.addEventListener('DOMContentLoaded', () => {
     // small timeout to ensure layout settled

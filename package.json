@@ -1,0 +1,15 @@
+{
+  "name": "personal-website-finals",
+  "version": "1.0.0",
+  "description": "Personal website finals",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
