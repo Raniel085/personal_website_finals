@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 :root {
     --primary-color: #F4B860;
     --primary-dark: #D4AF37;
@@ -24,6 +28,7 @@ body {
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
 }
 
 /* Snow background container */
@@ -708,6 +713,11 @@ body {
     font-size: 0.85rem;
 }
 
+/* Guestbook grid span */
+.guestbook {
+    grid-column: 1 / 4;
+}
+
 /* Contact CTA */
 .contact-cta {
     grid-column: 1 / 4;
@@ -869,7 +879,7 @@ footer {
     .contact-cta,
     .guestbook,
     .info {
-        grid-column: auto;
+        grid-column: 1 / -1;
     }
 
     .profile {
@@ -1219,10 +1229,6 @@ footer {
 }
 
 /* Guestbook */
-.guestbook {
-    grid-column: 1 / 4;
-}
-
 .guestbook-form {
     display: flex;
     flex-direction: column;
@@ -1374,4 +1380,233 @@ body.dark-mode .tech-badge {
 body.dark-mode .project-tags span {
     background: rgba(139, 92, 246, 0.15);
     color: var(--text-color);
+}
+
+/* ================================================
+   MOBILE RESPONSIVENESS ADDITIONS
+   ================================================ */
+
+/* Prevent text overflow in all cards */
+.bento-item {
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Guestbook entry text safety */
+.guestbook-entry p,
+.guestbook-entry strong {
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* ---- Disable hover animations on touch devices ---- */
+@media (hover: none) and (pointer: coarse) {
+    .bento-item:hover {
+        transform: none;
+        box-shadow: var(--shadow);
+    }
+
+    .playlist-item:hover {
+        transform: none;
+    }
+
+    .spotify-card:hover {
+        transform: none;
+    }
+
+    .progress-bar:hover {
+        height: 6px;
+    }
+
+    .social-links a:hover {
+        transform: none;
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .play-pause-btn:hover {
+        transform: none;
+    }
+
+    .spotify-btn:hover {
+        transform: none;
+    }
+
+    .tech-badge:hover {
+        background: linear-gradient(135deg, rgba(244, 184, 96, 0.1), rgba(255, 229, 92, 0.1));
+        color: var(--primary-color);
+    }
+
+    .gallery-item:hover img {
+        transform: none;
+    }
+
+    .btn-primary:hover {
+        transform: none;
+    }
+}
+
+/* ---- Small phone (≤ 480px) music player ---- */
+@media (max-width: 480px) {
+    .now-playing-current {
+        padding: 1rem;
+    }
+
+    .current-track-info {
+        gap: 0.6rem;
+        margin-bottom: 1rem;
+        flex-wrap: nowrap;
+    }
+
+    .current-track-info > i {
+        font-size: 1.4rem;
+        flex-shrink: 0;
+    }
+
+    .track-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .track-title {
+        font-size: 0.88rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .track-artist {
+        font-size: 0.78rem;
+    }
+
+    .spotify-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .progress-container {
+        gap: 0.5rem;
+    }
+
+    .time-label {
+        font-size: 0.7rem;
+        min-width: 26px;
+    }
+
+    .play-pause-btn {
+        width: 46px;
+        height: 46px;
+        font-size: 1.1rem;
+    }
+
+    .playlist-item {
+        padding: 0.75rem;
+        gap: 0.6rem;
+    }
+
+    .playlist-title {
+        font-size: 0.85rem;
+    }
+
+    .playlist-artist {
+        font-size: 0.75rem;
+    }
+
+    .playlist-number {
+        font-size: 0.9rem;
+        min-width: 18px;
+    }
+}
+
+/* ---- Extra small phones (≤ 360px) ---- */
+@media (max-width: 360px) {
+    .container {
+        padding: 1rem 0.5rem;
+    }
+
+    .bento-item {
+        padding: 0.875rem;
+        border-radius: 10px;
+    }
+
+    .nav-container {
+        padding: 0.7rem 0.75rem;
+    }
+
+    .logo {
+        font-size: 1.1rem;
+    }
+
+    .profile {
+        min-height: 260px;
+    }
+
+    .profile h1 {
+        font-size: 1.15rem;
+    }
+
+    .profile-img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .job-title {
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+
+    .social-links a {
+        width: 34px;
+        height: 34px;
+        font-size: 0.9rem;
+    }
+
+    .tech-badge {
+        font-size: 0.65rem;
+        padding: 0.3rem 0.55rem;
+    }
+
+    .tech-badge i {
+        font-size: 0.8rem;
+    }
+
+    .guestbook-entries {
+        max-height: 220px;
+    }
+
+    .track-title {
+        font-size: 0.82rem;
+    }
+
+    .track-artist {
+        font-size: 0.72rem;
+    }
+
+    .play-pause-btn {
+        width: 42px;
+        height: 42px;
+        font-size: 1rem;
+    }
+
+    .contact-cta {
+        min-height: 160px;
+    }
+
+    .contact-cta h2 {
+        font-size: 1.2rem;
+    }
+
+    .contact-cta p {
+        font-size: 0.82rem;
+    }
+
+    .btn-primary {
+        padding: 0.55rem 1.25rem;
+        font-size: 0.85rem;
+    }
+
+    footer p {
+        font-size: 0.75rem;
+    }
 }
