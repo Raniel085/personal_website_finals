@@ -1,0 +1,3 @@
+// Supabase configuration
+const SUPABASE_URL = 'https://mdtdnehbdwpzhvghjrnr.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kdGRuZWhiZHdwemh2Z2hqcm5yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyMTg0MjEsImV4cCI6MjA4Njc5NDQyMX0.vj3KrlLekRWAdTErYHQt_ujknMzTxg3ZIeQ7hygJOEo';

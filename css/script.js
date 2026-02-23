@@ -24,20 +24,42 @@ function updateThemeIcon() {
     }
 }
 
-// Guestbook Functionality
+// Guestbook Functionality — powered by Supabase
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 const guestbookForm = document.getElementById('guestbookForm');
 const guestbookEntries = document.getElementById('guestbookEntries');
 
-// Load guestbook entries from localStorage
-function loadGuestbookEntries() {
-    const entries = JSON.parse(localStorage.getItem('guestbookEntries')) || [];
+// Load guestbook entries from Supabase
+async function loadGuestbookEntries() {
+    guestbookEntries.innerHTML = '<p style="opacity:0.6">Loading...</p>';
+
+    const { data, error } = await supabaseClient
+        .from('guestbook')
+        .select('name, message, created_at')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error loading guestbook:', error);
+        guestbookEntries.innerHTML = '<p style="color:red">Failed to load entries.</p>';
+        return;
+    }
+
     guestbookEntries.innerHTML = '';
-    entries.reverse().forEach(entry => {
+    if (!data.length) {
+        guestbookEntries.innerHTML = '<p style="opacity:0.6">No entries yet. Be the first!</p>';
+        return;
+    }
+
+    data.forEach(entry => {
+        const date = new Date(entry.created_at).toLocaleDateString('en-US', {
+            year: 'numeric', month: 'short', day: 'numeric'
+        });
         const entryDiv = document.createElement('div');
         entryDiv.className = 'guestbook-entry';
         entryDiv.innerHTML = `
             <strong>${entry.name}</strong>
-            <em>${entry.email} • ${entry.date}</em>
+            <em>${date}</em>
             <p>${entry.message}</p>
         `;
         guestbookEntries.appendChild(entryDiv);
@@ -45,24 +67,29 @@ function loadGuestbookEntries() {
 }
 
 // Handle guestbook form submission
-guestbookForm.addEventListener('submit', (e) => {
+guestbookForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-    const name = document.getElementById('visitorName').value;
-    const email = document.getElementById('visitorEmail').value;
-    const message = document.getElementById('visitorMessage').value;
-    
-    const entries = JSON.parse(localStorage.getItem('guestbookEntries')) || [];
-    const newEntry = {
-        name,
-        email,
-        message,
-        date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-    };
-    
-    entries.push(newEntry);
-    localStorage.setItem('guestbookEntries', JSON.stringify(entries));
-    
+
+    const name = document.getElementById('visitorName').value.trim();
+    const message = document.getElementById('visitorMessage').value.trim();
+    const submitBtn = guestbookForm.querySelector('.btn-submit');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    const { error } = await supabaseClient
+        .from('guestbook')
+        .insert([{ name, message }]);
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Sign Guestbook';
+
+    if (error) {
+        console.error('Error submitting entry:', error);
+        alert('Failed to submit. Please try again.');
+        return;
+    }
+
     guestbookForm.reset();
     loadGuestbookEntries();
 });
@@ -239,24 +266,24 @@ window.addEventListener('resize', () => {
 
 // Music Player Functionality
 const playlist = [
-    { title: 'Kalapastangan', artist: 'Artist', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', spotifyUrl: 'https://open.spotify.com/artist/3tWAXoP37qDPvpAOnj7Zmr?si=ZlC6oza3QUiXLR7J06FASg' },
-    { title: 'Always', artist: 'Artist', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1E8NG9HeYK83rI?si=MVTreXdcSuuIdh4b9EU20A' },
-    { title: 'Saglit', artist: 'Artist', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', spotifyUrl: 'https://open.spotify.com/album/2G5Ehp6kqdH5z4sGVCC8yY' }
+    { title: 'Kalapastangan', artist: 'fitterkarma',       url: 'audio/fitterkarma - Kalapastangan (Lyrics).mp3', spotifyUrl: 'https://open.spotify.com/track/1udOOSbJnytCdgvbgYOF5s' },
+    { title: 'Always',        artist: 'Daniel Caesar',      url: 'audio/Daniel Caesar - Always (Lyrics).mp3',       spotifyUrl: 'https://open.spotify.com/track/2LlOeW5rVcvl3QcPNPcDus' },
+    { title: 'Saglit',        artist: 'Avidra feat. bleep', url: 'audio/Saglit.mp3',                                spotifyUrl: 'https://open.spotify.com/album/2G5Ehp6kqdH5z4sGVCC8yY'  }
 ];
 
 let currentTrackIndex = 0;
 let isPlaying = false;
 
-const audioPlayer = document.getElementById('audioPlayer');
-const playPauseBtn = document.getElementById('playPauseBtn');
-const progressBar = document.getElementById('progressBar');
-const progressFill = document.getElementById('progressFill');
-const timeCurrent = document.getElementById('timeCurrent');
-const timeTotal = document.getElementById('timeTotal');
-const currentTrackTitle = document.getElementById('currentTrackTitle');
+const audioPlayer    = document.getElementById('audioPlayer');
+const playPauseBtn   = document.getElementById('playPauseBtn');
+const progressBar    = document.getElementById('progressBar');
+const progressFill   = document.getElementById('progressFill');
+const timeCurrent    = document.getElementById('timeCurrent');
+const timeTotal      = document.getElementById('timeTotal');
+const currentTrackTitle  = document.getElementById('currentTrackTitle');
 const currentTrackArtist = document.getElementById('currentTrackArtist');
-const spotifyLink = document.getElementById('spotifyLink');
-const playlistItems = document.querySelectorAll('.playlist-item');
+const spotifyLink    = document.getElementById('spotifyLink');
+const playlistItems  = document.querySelectorAll('.playlist-item');
 
 function formatTime(seconds) {
     if (isNaN(seconds)) return '0:00';
@@ -269,66 +296,65 @@ function loadTrack(index) {
     currentTrackIndex = index;
     const track = playlist[index];
     audioPlayer.src = track.url;
-    currentTrackTitle.textContent = track.title;
+    currentTrackTitle.textContent  = track.title;
     currentTrackArtist.textContent = track.artist;
     spotifyLink.href = track.spotifyUrl;
-    
-    playlistItems.forEach((item, i) => {
-        item.classList.toggle('active', i === index);
-    });
-    
-    if (isPlaying) {
-        audioPlayer.play();
-    }
+    playlistItems.forEach((item, i) => item.classList.toggle('active', i === index));
+    if (isPlaying) audioPlayer.play();
 }
 
 function togglePlayPause() {
     if (isPlaying) {
         audioPlayer.pause();
         isPlaying = false;
-        playPauseBtn.innerHTML = '<i class=\"fas fa-play\"></i>';
+        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
     } else {
         audioPlayer.play();
         isPlaying = true;
-        playPauseBtn.innerHTML = '<i class=\"fas fa-pause\"></i>';
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
     }
 }
 
-playPauseBtn.addEventListener('click', togglePlayPause);
+if (audioPlayer && playPauseBtn) {
+    playPauseBtn.addEventListener('click', togglePlayPause);
 
-audioPlayer.addEventListener('timeupdate', () => {
-    const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-    progressFill.style.width = percent + '%';
-    timeCurrent.textContent = formatTime(audioPlayer.currentTime);
-});
-
-audioPlayer.addEventListener('loadedmetadata', () => {
-    timeTotal.textContent = formatTime(audioPlayer.duration);
-});
-
-audioPlayer.addEventListener('ended', () => {
-    currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-    loadTrack(currentTrackIndex);
-    audioPlayer.play();
-});
-
-progressBar.addEventListener('click', (e) => {
-    const rect = progressBar.getBoundingClientRect();
-    const percent = (e.clientX - rect.left) / rect.width;
-    audioPlayer.currentTime = percent * audioPlayer.duration;
-});
-
-playlistItems.forEach((item, index) => {
-    item.addEventListener('click', () => {
-        loadTrack(index);
-        isPlaying = true;
-        playPauseBtn.innerHTML = '<i class=\"fas fa-pause\"></i>';
-        audioPlayer.play();
+    audioPlayer.addEventListener('timeupdate', () => {
+        const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+        progressFill.style.width = percent + '%';
+        timeCurrent.textContent = formatTime(audioPlayer.currentTime);
     });
-});
 
-// Load first track on page load
-loadTrack(0);
+    audioPlayer.addEventListener('loadedmetadata', () => {
+        timeTotal.textContent = formatTime(audioPlayer.duration);
+    });
+
+    audioPlayer.addEventListener('ended', () => {
+        currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+        loadTrack(currentTrackIndex);
+        audioPlayer.play();
+        isPlaying = true;
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    });
+
+    if (progressBar) {
+        progressBar.addEventListener('click', (e) => {
+            const rect = progressBar.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            audioPlayer.currentTime = percent * audioPlayer.duration;
+        });
+    }
+
+    playlistItems.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            isPlaying = true;
+            loadTrack(index);
+            audioPlayer.play();
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        });
+    });
+
+    loadTrack(0);
+}
 
 // Initial generate after DOM ready
 document.addEventListener('DOMContentLoaded', () => {

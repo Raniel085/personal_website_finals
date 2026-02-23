@@ -436,7 +436,67 @@ body {
 .spotify-embeds {
     display: flex;
     flex-direction: column;
+    gap: 0.75rem;
+}
+
+.yt-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: -0.25rem;
+}
+
+.spotify-card {
+    display: flex;
+    align-items: center;
     gap: 1rem;
+    background: rgba(244, 184, 96, 0.07);
+    border: 1px solid rgba(244, 184, 96, 0.25);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: all 0.25s ease;
+}
+
+.spotify-card:hover {
+    background: rgba(244, 184, 96, 0.18);
+    border-color: var(--primary-color);
+    transform: translateX(4px);
+}
+
+.spotify-card-icon {
+    font-size: 1.8rem;
+    color: #1DB954;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.spotify-card-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.spotify-card-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.spotify-card-sub {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-top: 0.15rem;
+}
+
+.spotify-card-arrow {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    flex-shrink: 0;
 }
 
 .now-playing-current {
@@ -559,6 +619,14 @@ body {
     transition: width 0.1s linear;
 }
 
+.time-label {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    min-width: 32px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
 .playlist-item {
     display: flex;
     align-items: center;
@@ -572,6 +640,9 @@ body {
     transition: all 0.3s ease;
     cursor: pointer;
     font-family: inherit;
+    width: 100%;
+    text-align: left;
+    outline: none;
 }
 
 .playlist-item:hover {
